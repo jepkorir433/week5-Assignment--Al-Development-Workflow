@@ -1,4 +1,4 @@
-Problem Scope (5 points)
+Problem Scope 
 Problem: Predict the risk of patient readmission within 30 days post-discharge to enable proactive interventions.
 Objectives:
 
@@ -19,7 +19,7 @@ Payers (lower costs via preventive care).
 
 Regulatory Bodies (ensure compliance with healthcare standards).
 
-Data Strategy (10 points)
+Data Strategy 
 1. Data Sources:
 
 EHRs: Diagnosis codes, medications, lab results, discharge notes.
@@ -56,7 +56,7 @@ Encoding: One-hot encode diagnoses (ICD-10 codes); scale numerical features (Sta
 
 Class Handling: Address imbalance via SMOTE or class weighting.
 
-Model Development (10 points)
+Model Development 
 1. Model Selection:
 
 Choice: Gradient Boosting (XGBoost/LightGBM).
@@ -84,7 +84,7 @@ Interpretation: 60% of high-risk predictions are correct.
 Recall: TP / (TP + FN) = 150 / (150 + 50) = 0.75
 Interpretation: Captures 75% of actual readmissions.
 
-Deployment (10 points)
+Deployment 
 1. Integration Steps:
 
 API Development: Wrap model in a REST API (e.g., Flask/FastAPI).
@@ -109,7 +109,7 @@ Auditability: Maintain prediction logs for audits.
 
 De-identification: Use in development; real data only in secure production.
 
-_Optimization_ (5 points)
+_Optimization_ 
 Method to Address Overfitting:
 
 Regularization via Cross-Validation:
