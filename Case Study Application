@@ -1,0 +1,122 @@
+Problem Scope (5 points)
+Problem: Predict the risk of patient readmission within 30 days post-discharge to enable proactive interventions.
+Objectives:
+
+Reduce avoidable readmissions and associated costs.
+
+Improve patient outcomes through targeted care (e.g., follow-up calls, home visits).
+
+Optimize hospital resource allocation.
+Stakeholders:
+
+Patients (receive personalized care).
+
+Clinicians (identify high-risk patients).
+
+Hospital Administrators (reduce penalties under value-based care models).
+
+Payers (lower costs via preventive care).
+
+Regulatory Bodies (ensure compliance with healthcare standards).
+
+Data Strategy (10 points)
+1. Data Sources:
+
+EHRs: Diagnosis codes, medications, lab results, discharge notes.
+
+Demographics: Age, gender, race, ZIP code (proxy for socioeconomic status).
+
+Clinical History: Prior admissions, comorbidities (e.g., Charlson Index).
+
+Operational Data: Length of stay, discharge disposition (e.g., home vs. facility).
+
+External Data: Social determinants of health (e.g., via public databases linked to ZIP code).
+
+2. Ethical Concerns:
+
+Patient Privacy: Risk of re-identification via ZIP code + rare diagnoses.
+Mitigation: Aggregate ZIP codes; use differential privacy.
+
+Bias: Model may underperform for marginalized groups (e.g., due to uneven historical care access).
+Mitigation: Stratify data sampling; audit model fairness across subgroups.
+
+3. Preprocessing Pipeline:
+
+Cleaning: Remove duplicates; impute missing lab values (median) or drop features >30% missing.
+
+Feature Engineering:
+
+Temporal: "Days since last admission," "Number of past readmissions."
+
+Clinical: "Polypharmacy flag" (>10 medications), "Comorbidity burden score."
+
+Operational: "Discharge to rehabilitation facility" (binary).
+
+Encoding: One-hot encode diagnoses (ICD-10 codes); scale numerical features (StandardScaler).
+
+Class Handling: Address imbalance via SMOTE or class weighting.
+
+Model Development (10 points)
+1. Model Selection:
+
+Choice: Gradient Boosting (XGBoost/LightGBM).
+
+Justification:
+
+Handles mixed data types (numeric/categorical).
+
+Captures non-linear relationships (e.g., medication interactions).
+
+Provides feature importance for clinical interpretability.
+
+2. Confusion Matrix & Metrics (Hypothetical):
+
+Data: 1,000 patients; 150 readmissions (15% positive class).
+
+Confusion Matrix:
+
+Predicted: No	Predicted: Yes
+Actual: No	700 (TN)	100 (FP)
+Actual: Yes	50 (FN)	150 (TP)
+Precision: TP / (TP + FP) = 150 / (150 + 100) = 0.60
+Interpretation: 60% of high-risk predictions are correct.
+
+Recall: TP / (TP + FN) = 150 / (150 + 50) = 0.75
+Interpretation: Captures 75% of actual readmissions.
+
+Deployment (10 points)
+1. Integration Steps:
+
+API Development: Wrap model in a REST API (e.g., Flask/FastAPI).
+
+EHR Integration: Trigger predictions via discharge-triggered events (e.g., using HL7/FHIR standards).
+
+Dashboard: Display risk scores in clinician dashboards with explanations (SHAP values).
+
+Batch Updates: Retrain model monthly with new data.
+
+2. Regulatory Compliance (HIPAA):
+
+Data Security:
+
+Encrypt data in transit (TLS) and at rest (AES-256).
+
+Store data in HIPAA-compliant cloud (e.g., AWS HIPAA BAA).
+
+Access Control: Role-based access (e.g., clinicians only).
+
+Auditability: Maintain prediction logs for audits.
+
+De-identification: Use in development; real data only in secure production.
+
+_Optimization_ (5 points)
+Method to Address Overfitting:
+
+Regularization via Cross-Validation:
+
+Use 5-fold cross-validation to tune hyperparameters (e.g., max_depth, learning_rate).
+
+Add penalties: Increase reg_alpha (L1) and reg_lambda (L2) in XGBoost to suppress noisy features.
+
+Impact: Reduces model complexity, ensuring robustness to unseen data.
+
